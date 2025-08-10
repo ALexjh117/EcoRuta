@@ -49,7 +49,7 @@ const NavbaraP: React.FC<NavbaraPProps> = ({
         Mi DashBoard
         </span>
          <RotatingText
-            texts={['Disfruta', 'Viaja', 'Divierte', 'Conecta!']}
+            texts={['¡Disfruta!', '¡Explora!', '¡Divierte!', '¡Conecta!']}
             className="rotating-text-dash"
           />
 

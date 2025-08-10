@@ -13,7 +13,10 @@
     "@types/jest": "^30.0.0",
     "axios": "^1.11.0",
     "bits": "^0.1.1",
+    "file-saver": "^2.0.5",
     "icons": "^1.0.0",
+    "jspdf": "^3.0.1",
+    "jspdf-autotable": "^5.0.2",
     "leaflet": "^1.9.4",
     "motion": "^12.23.12",
     "react": "^19.1.1",
@@ -21,7 +24,8 @@
     "react-doom": "^1.0.0",
     "react-icons": "^5.5.0",
     "react-leaflet": "^5.0.0",
-    "react-router-dom": "^7.8.0"
+    "react-router-dom": "^7.8.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",

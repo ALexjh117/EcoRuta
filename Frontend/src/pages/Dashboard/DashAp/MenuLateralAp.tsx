@@ -119,11 +119,18 @@ export default function MenuLateral({
               </button>
 
               <button
-                onClick={() => setContenidoActual("aplicacion")}
+                onClick={() => setContenidoActual("recompensas")}
                 className="opciondash"
               >
                 <FaRegCalendarCheck className="iconodash" /> Logros
               </button>
+               <button
+          onClick={() => setContenidoActual("historialrecorridos")}
+          className="opciondash"
+        >
+          <FaHome className="iconodash" /> Recorridos
+        </button>
+
             </>
           )}
         </div>

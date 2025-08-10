@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 // Componentes
 import MenuLateralAp from "../src/pages/Dashboard/DashAp/MenuLateralAp";
 import NavbaraP from "../src/pages/Dashboard/DashAp/NavbarAp";
-
+import Recompensas from "../src/pages/Recompensas/Recompensas";
 import RoutePlanner from "../src/components/RoutePlanner";
 import UserView from "../src/pages/userview/UserView";
 import type { Usuario as UsuarioCompleto } from "../src/pages/userview/UserView";
@@ -20,6 +20,8 @@ import "../src/pages/Dashboard/styles/fondo.css"
 import "../src/pages/Dashboard/styles/global.css"
 
 import "../public/style/Dash.css"
+import HistorialRecorridos from "../src/pages/HistorialRecorridos/HistorialRecorridos";
+
 // Props para NavbaraP (si decides modificar el componente para recibirlas)
 
 export default function DashBoard(): JSX.Element {
@@ -67,6 +69,8 @@ export default function DashBoard(): JSX.Element {
         />
 
         {contenidoActual === "mapa" && <RoutePlanner />}
+         {contenidoActual === "recompensas" && <Recompensas />}
+          {contenidoActual === "historialrecorridos" && <HistorialRecorridos />}
 
         {contenidoActual === "userview" && (
           <UserView usuario={usuario} setContenidoActual={setContenidoActual} />
