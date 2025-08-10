@@ -1,0 +1,90 @@
+.div-ruta-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  background: #f9faff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  padding: 40px;
+  max-width: 1024px;
+ 
+  margin: 20px auto;
+}
+
+.div-ruta-map .leaflet-container {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  height: 400px; /* mantén fijo, igual que en inline style */
+  width: 100%;
+}
+
+.div-ruta-modo-transporte {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.div-ruta-button {
+  cursor: pointer;
+  background-color: #e3eafc;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 1rem;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(58, 114, 255, 0.2);
+  user-select: none;
+}
+
+.div-ruta-button:hover {
+  background-color: #c4d1ff;
+  border-color: #3a72ff;
+  box-shadow: 0 4px 14px rgba(58, 114, 255, 0.4);
+}
+
+.div-ruta-button:focus {
+  outline: none;
+  border-color: #2a56d4;
+  box-shadow: 0 0 0 3px rgba(58, 114, 255, 0.5);
+}
+
+.div-ruta-button-active {
+  background-color: #3a72ff !important;
+  color: white;
+  border-color: #2a56d4 !important;
+  box-shadow: 0 4px 14px rgba(58, 114, 255, 0.7);
+}
+
+.div-ruta-info {
+  font-size: 1.1rem;
+  background: #e6f0ff;
+  padding: 14px 20px;
+  border-radius: 10px;
+  box-shadow: inset 0 0 6px #bdd2ff;
+  user-select: none;
+}
+
+.div-ruta-info strong {
+  color: #2c3e50;
+}
+
+@media (max-width: 768px) {
+  .div-ruta-container {
+    width: 90vh;
+    padding: 15px;
+  }
+
+  .div-ruta-map .leaflet-container {
+    height: 300px !important;
+    width: 100% !important;
+  }
+
+  .div-ruta-modo-transporte {
+    justify-content: center;
+  }
+
+  .div-ruta-button {
+    flex: 1 1 100px;
+  }
+}

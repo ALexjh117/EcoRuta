@@ -1,0 +1,156 @@
+/* Contenedor del formulario */
+.eco-formulario-inicio-sesion {
+  max-width: 380px;
+  margin: 5vh auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 16px;
+  margin-left: 580px;
+  box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+/* Grupo de cada campo */
+.eco-grupo-campo-inicio {
+  margin-bottom: 1.4rem;
+}
+
+/* Etiquetas */
+.eco-etiqueta-inicio {
+  display: block;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.eco-etiqueta-inicio-desktop {
+  font-size: 1rem;
+}
+
+/* Contenedor input + icono */
+.eco-contenedor-input-inicio {
+  display: flex;
+  align-items: center;
+  border: 1.8px solid #ddd;
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  background: #f9f9f9;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.eco-contenedor-input-inicio:focus-within {
+  border-color: #4f46e5;
+  background: #fff;
+}
+
+/* Iconos dentro de los inputs */
+.eco-icono-input-inicio {
+  width: 100px;
+  height: 20px;
+  color: #666;
+  margin-right: 0.6rem;
+}
+
+/* Inputs */
+.eco-campo-input-inicio {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.eco-campo-input-inicio::placeholder {
+  color: #aaa;
+}
+
+/* Opciones debajo de la contraseña */
+.eco-contenedor-opciones-inicio {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
+  font-size: 0.85rem;
+}
+
+.eco-etiqueta-checkbox-inicio {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.eco-checkbox-inicio {
+  margin-right: 0.5rem;
+}
+
+.eco-texto-checkbox-inicio {
+  color: #555;
+}
+
+.eco-enlace-recuperar-inicio {
+  color: #4f46e5;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.eco-enlace-recuperar-inicio:hover {
+  text-decoration: underline;
+}
+
+/* Botón */
+.eco-boton-inicio-sesion {
+  width: 100%;
+  background: #4f46e5;
+  color: #fff;
+  padding: 0.9rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.eco-boton-inicio-sesion:hover {
+  background: #4338ca;
+}
+
+.eco-boton-inicio-sesion:active {
+  transform: scale(0.98);
+}
+
+.eco-boton-inicio-sesion:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
+/* Mensajes */
+.eco-mensaje-exito {
+  color: #22c55e;
+  font-weight: 500;
+}
+
+.eco-mensaje-error {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+/* Responsividad */
+@media (max-width: 480px) {
+  .eco-formulario-inicio-sesion {
+    margin: 3vh auto;
+    padding: 1.5rem;
+  }
+}
+
+.eco-titulo-inicio-sesion {
+  display: flex;
+  width: 590px;
+  margin-left: 490px;
+}
+
+.eco-enlace-registro {
+  margin-left: 20px;
+}

@@ -1,9 +1,12 @@
 //para este componente se uso leaflet una liberia de js que permite crear mapas iterativos para 
 //paginas web
-import React, { useState, useMemo } from "react";
+import  { useState, useMemo } from "react";
 // Importamos React y dos hooks importantes:
 // useState para manejar estados internos del componente,
 // useMemo para memorizar valores calculados y optimizar el rendimiento
+
+//importar css para las rutas 
+import "./style/RoutePlanner.css"
 
 import {
   MapContainer, // es el contenedor principal donde se renderiza el mapa
@@ -31,15 +34,21 @@ import shadowUrl from "leaflet/dist/images/marker-shadow.png";//sombra que apare
 //elimina la funcion interna del leaflet usa para obtener rutas por defecto iconos
 //bundlers o empaquetados son los que toman el codigo fuente y los recursos del proyecto
 // y los empaqueta en unos pocos archivos
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({//remplaza esas rutas por defecto con las imagenes importadas arriba 
-// //asegurnandose que los marcadores se muestren correctamente
+
+
+/// Creamos un icono personalizado para los marcadores usando las imágenes importadas,
+// con tamaños y anclas configuradas para que se vean correctamente en el mapa.
+const customIcon = L.icon({
   iconRetinaUrl,
   iconUrl,
   shadowUrl,
+  iconSize: [25, 41], //tamaño del icono
+  iconAnchor: [12, 41], //Punto del icono que estará en la posición (la "punta" del marcador)
+  popupAnchor: [1, -34],//Posición donde se muestra el popup respecto al icono
+  shadowSize: [41, 41],  //tamaño de la sombra debajo del icono
 });
 
-// aqui guarda una tupla con dos numeros latitud y longitud
+// aqui guarda una tupla con dos numeros latitud y longitud(tupla fijo numero de elementos especificos)
 //latitud es el valor que indica que tan al norte o sur se encuentra algo
 //esta posiciion corresponde a las coordenadas de Bogota , colombia puesss
 // EL TIPO NUMBER INDICA QUE ES UN ARREGLO DE DOS NUMEROS ( PARA EL TIPADO)
@@ -121,85 +130,67 @@ export default function RoutePlanner() {
   // el array le dice a memo que solo se vuelba a ejecutar el calculo cuando cmabie alguno
   //de los dos estados
 
+
+ 
+
   return (
-    // Contenedor principal con tamaño fijo para el mapa y controles
-    <div style={{ height: "400px", width: "1000px" }}>
-      {/* Contenedor del mapa */}
-      <MapContainer
-        center={defaultPosition} // posición inicial del mapa
-        zoom={13} // nivel de zoom inicial
-        style={{ height: "100%", width: "100%" }} // ocupar todo el tamaño del div padre
+  <div className="div-ruta-container">
+    <MapContainer
+      center={defaultPosition}
+      zoom={13}
+      className="div-ruta-map"
+      style={{ height: "400px", width: "100%" }}
+    >
+      <TileLayer
+        attribution="&copy; OpenStreetMap contributors"
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <ClickHandler onClick={handleMapClick} />
+
+      {origin && <Marker position={origin}  icon={customIcon}/>}
+      {destination && <Marker position={destination} icon={customIcon}/>}
+
+      {origin && destination && (
+        <Polyline positions={[origin, destination]} color="blue" weight={5} />
+      )}
+    </MapContainer>
+
+    <div className="div-ruta-modo-transporte" style={{ marginTop: 10, marginBottom: 10 }}>
+      <strong>Modo de transporte:</strong> <br />
+      <button
+        className={`div-ruta-button ${modotransporte === "caminando" ? "div-ruta-button-active" : ""}`}
+        onClick={() => setModoTransporte("caminando")}
       >
-        {/* Capa base de OpenStreetMap */}
-        <TileLayer
-          attribution="&copy; OpenStreetMap contributors"
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {/* Componente que escucha clics en el mapa */}
-        <ClickHandler onClick={handleMapClick} />
-
-        {/* Marcador para el origen si está seleccionado */}
-        {origin && <Marker position={origin} />}
-
-        {/* Marcador para el destino si está seleccionado */}
-        {destination && <Marker position={destination} />}
-
-        {/* Línea azul que une origen y destino, si ambos están definidos */}
-        {origin && destination && (
-          <Polyline positions={[origin, destination]} color="blue" weight={5} />
-        )}
-      </MapContainer>
-
-      {/* Sección para seleccionar el modo de transporte */}
-      <div style={{ marginTop: 10, marginBottom: 10 }}>
-        <strong>Modo de transporte:</strong> <br />
-        {/* Botones que cambian el estado modotransporte */}
-        <button
-          onClick={() => setModoTransporte("caminando")}
-          style={{
-            backgroundColor: modotransporte === "caminando" ? "lightblue" : "",
-          }}
-        >
-          Caminata 🚶‍♀️
-        </button>
-        <button
-          onClick={() => setModoTransporte("bicicleta")}
-          style={{
-            backgroundColor: modotransporte === "bicicleta" ? "lightblue" : "",
-            marginLeft: 8,
-          }}
-        >
-          Bicicleta 🚴‍♂️
-        </button>
-        <button
-          onClick={() => setModoTransporte("publico")}
-          style={{
-            backgroundColor: modotransporte === "publico" ? "lightblue" : "",
-            marginLeft: 8,
-          }}
-        >
-          Transporte público 🚌
-        </button>
-        {/* Texto que muestra qué modo está seleccionado */}
-        <div>
-          <strong>Transporte seleccionado:</strong>{" "}
-          {modotransporte ? modotransporte : "Ninguno"}
-        </div>
-      </div>
-
-      {/* Sección que muestra la información actual */}
-      <div style={{ marginTop: 10 }}>
-        <strong>Origen:</strong>{" "}
-        {origin ? origin.join(", ") : "No seleccionado"} <br />
-        <strong>Destino:</strong>{" "}
-        {destination ? destination.join(", ") : "No seleccionado"} <br />
-        {/* Si hay distancia, mostrarla */}
-        {distanceKm && (
-          <div>
-            <strong>Distancia:</strong> {distanceKm} Km
-          </div>
-        )}
+        Caminata 🚶‍♀️
+      </button>
+      <button
+        className={`div-ruta-button ${modotransporte === "bicicleta" ? "div-ruta-button-active" : ""}`}
+        onClick={() => setModoTransporte("bicicleta")}
+        style={{ marginLeft: 8 }}
+      >
+        Bicicleta 🚴‍♂️
+      </button>
+      <button
+        className={`div-ruta-button ${modotransporte === "publico" ? "div-ruta-button-active" : ""}`}
+        onClick={() => setModoTransporte("publico")}
+        style={{ marginLeft: 8 }}
+      >
+        Transporte público 🚌
+      </button>
+      <div>
+        <strong>Transporte seleccionado:</strong> {modotransporte || "Ninguno"}
       </div>
     </div>
-  );
+
+    <div className="div-ruta-info" style={{ marginTop: 10 }}>
+      <strong>Origen:</strong> {origin ? origin.join(", ") : "No seleccionado"} <br />
+      <strong>Destino:</strong> {destination ? destination.join(", ") : "No seleccionado"} <br />
+      {distanceKm && (
+        <div>
+          <strong>Distancia:</strong> {distanceKm} Km
+        </div>
+      )}
+    </div>
+  </div>
+);
 }

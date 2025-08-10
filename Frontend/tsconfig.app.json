@@ -28,5 +28,5 @@
       "ReactBits/*": ["src/ReactBits/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src","public"]
 }
