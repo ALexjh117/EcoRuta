@@ -7,6 +7,13 @@ import  { useState, useMemo } from "react";
 
 //importar css para las rutas 
 import "./style/RoutePlanner.css"
+//importamos api
+import api from '../services/api'
+
+
+import { useAuth } from "../contexts/AuthContext"; 
+// Pon aquí la ruta real donde esté tu contexto de autenticación
+
 
 import {
   MapContainer, // es el contenedor principal donde se renderiza el mapa
@@ -122,7 +129,7 @@ export default function RoutePlanner() {
       const to = L.latLng(destination[0], destination[1]);
 
       // Calculamos la distancia  en ambos puntos en metros y la convertimos a kilómetros con 2 decimales
-      return (from.distanceTo(to) / 1000).toFixed(2);
+      return parseFloat((from.distanceTo(to) / 1000).toFixed(2));
     }
     // Si no hay ambos puntos, no hay distancia
     return null;
@@ -130,6 +137,67 @@ export default function RoutePlanner() {
   // el array le dice a memo que solo se vuelba a ejecutar el calculo cuando cmabie alguno
   //de los dos estados
 
+
+  const { usuario } = useAuth(); // user tendría info como id, nombre, etc.
+
+const factoresEmision:{[key:string]:number}={
+  caminata :0,
+  bicicleta :0,
+  "transporte publico":0.05,
+}
+
+  const id_usuario = usuario?.IdUsuario;
+
+const handleGuardarRecorrido = async () => {
+
+  
+  if (!origin || !destination || !modotransporte) {
+    alert("Debes seleccionar origen, destino y modo de transporte");
+    return;
+  }
+
+  // Mapeo correcto de los valores del frontend a la base de datos
+  const mapeoTransporte = {
+    "caminando": "caminata",        // Frontend -> Base de datos
+    "bicicleta": "bicicleta",       // Se mantiene igual
+    "publico": "transporte publico"  // Frontend -> Base de datos
+  };
+const factor =factoresEmision[mapeoTransporte[modotransporte]]??0;
+  const emisionCo2Calculadas=distanceKm?distanceKm *factor:0
+  try {
+    const { data: ruta } = await api.post("/rutas/obtener-o-crear", {
+      id_usuario,
+      nombre_ruta: "Ruta desde app",
+      punto_origen_lat: origin[0],
+      punto_origen_lng: origin[1],
+      punto_destino_lat: destination[0],
+      punto_destino_lng: destination[1],
+      medio_transporte: mapeoTransporte[modotransporte], // Usar el mapeo
+    });
+
+    const fecha = new Date().toISOString().split("T")[0];
+    const tiempo_ruta = "00:30:00"; // Puedes ajustar este valor
+
+    await api.post("/recorridos", {
+      id_ruta: ruta.id_ruta,
+      fecha_recorrido: fecha,
+      tiempo_ruta,
+      id_usuario,
+
+      medio_transporte:mapeoTransporte[modotransporte],
+      km_recorridos: distanceKm,
+      emision_co2: emisionCo2Calculadas,
+    });
+
+    alert("Recorrido guardado con éxito");
+    setOrigin(null);
+    setDestination(null);
+    setModoTransporte(null);
+  } catch (error) {
+    console.error("Error guardando recorrido:", error);
+    alert("Error al guardar recorrido");
+  }
+};
 
  
 
@@ -180,6 +248,10 @@ export default function RoutePlanner() {
       <div>
         <strong>Transporte seleccionado:</strong> {modotransporte || "Ninguno"}
       </div>
+      <button onClick={handleGuardarRecorrido} style={{ marginTop: 10 }}>
+  Guardar recorrido
+</button>
+
     </div>
 
     <div className="div-ruta-info" style={{ marginTop: 10 }}>

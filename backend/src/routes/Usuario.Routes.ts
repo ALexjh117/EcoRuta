@@ -30,6 +30,8 @@ router.put('/:id',
 router.delete('/:id', 
     UsuarioController.eliminarUserId
 )
+router.post('/login', UsuarioController.loginUser);
+
 
 
 export default router

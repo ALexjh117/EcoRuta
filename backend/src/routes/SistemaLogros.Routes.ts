@@ -7,7 +7,7 @@ import { validateSystemLogroBody, validateSystemLogroId } from "../middlewares/S
 const router = Router()
 
 router.get('/', SistemaLogros.getAllSitemaLogros)
-
+router.get("/ranking", SistemaLogros.getRankingUsuarios);
 router.get('/:id',
 validateSystemLogroId,
 handleInputErrors,
@@ -29,7 +29,8 @@ router.put('/:id',
 
 
 router.delete('/:id',
-    validateSystemLogroBody,
+    validateSystemLogroId,
+    handleInputErrors,
     SistemaLogros.eliminarSitemaLogros
 )
 

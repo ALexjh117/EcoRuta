@@ -3,7 +3,7 @@ import { param, validationResult, body } from "express-validator";
 import {Usuarios} from '../models/Usuarios'
 
 export const validateIdUsuario = async (req: Request, res: Response, next: NextFunction) =>{
-    await param('id_usuario').isInt().withMessage("El ID deben ser numeros.")
+    await param('id').isInt().withMessage("El ID deben ser numeros.")
     .custom(value => value > 0).withMessage("El ID no puede ser menor a 0.")
     .run(req)
     const errors = validationResult(req)

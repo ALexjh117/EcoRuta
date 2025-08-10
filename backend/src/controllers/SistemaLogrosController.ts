@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import Sistema_Logros from "../models/SistemaLogros";
-
+import { Sequelize } from "sequelize-typescript";
+import usuario from '../models/Usuarios'
 export class SistemaLogros {
     static getAllSitemaLogros = async (req: Request, res:Response) => {
         try{
@@ -89,4 +90,35 @@ export class SistemaLogros {
             }
     }
 
+
+static getRankingUsuarios = async (req: Request, res: Response) => {
+  try {
+    const ranking = await Sistema_Logros.findAll({
+      attributes: [
+        'id_usuario',
+        [Sequelize.fn('SUM', Sequelize.col('puntos_usuario')), 'total_puntos']
+      ],
+      group: ['id_usuario'],
+      order: [[Sequelize.literal('total_puntos'), 'DESC']],
+      include: [{
+        model: usuario,
+        attributes: ['Nombre', 'Apellido', 'Correo'] // o los campos que quieras mostrar
+      }]
+    });
+     // Aquí es donde agregas la asignación de medallas
+    ranking.forEach(user => {
+      const puntos = user.getDataValue('total_puntos');
+      if (puntos >= 1000) user.setDataValue('medalla', 'Oro');
+      else if (puntos >= 500) user.setDataValue('medalla', 'Plata');
+      else if (puntos >= 100) user.setDataValue('medalla', 'Bronce');
+      else user.setDataValue('medalla', 'Sin medalla');
+    });
+
+ 
+    res.json(ranking);
+  } catch (error) {
+    console.error("Error al obtener ranking:", error);
+    res.status(500).json({ error: "Error al obtener ranking de usuarios" });
+  }
+};
 }

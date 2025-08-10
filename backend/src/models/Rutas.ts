@@ -26,9 +26,11 @@ export class Rutas extends Model {
   @Column({ type: DataType.DECIMAL(9, 6), allowNull: false })
   declare punto_destino_lng: number;
 
-  @Column({ type: DataType.ENUM("bicicleta", "caminata", "transporte publico"), allowNull: false })
-  declare medio_transporte: string;
 
+
+// Por esta:
+@Column({ type: DataType.STRING(20), allowNull: false })
+declare medio_transporte: string;
   @BelongsTo(() => Usuarios, { foreignKey: "id_usuario" })
   declare usuario: Usuarios;
 

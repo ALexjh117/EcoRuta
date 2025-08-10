@@ -7,7 +7,7 @@ import { handleInputErrors } from "../middlewares/Validation";
 const router = Router();
 
 router.get("/", RecorridosController.getAllRecorrido);
-
+router.get("/usuario/:id_usuario", RecorridosController.getRecorridosPorUsuario);
 router.get("/:id", 
     validateIdRecorrido, 
     handleInputErrors,
@@ -31,5 +31,7 @@ router.delete("/:id",
     validateIdRecorrido, 
     RecorridosController.EliminarRecorrido
 );
+
+
 
 export default router;

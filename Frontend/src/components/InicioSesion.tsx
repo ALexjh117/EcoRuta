@@ -74,27 +74,30 @@ export default function InicioSesion() {
     setMensaje("");
 
     try {
-      const response = await api.post<LoginResponse>("/usuario/login", {
-        Correo: datosFormulario.correo,
-        Contrasena: datosFormulario.contrasena,
+      const response = await api.post<LoginResponse>("/usuarios/login", {
+        correo: datosFormulario.correo,
+        contrasena: datosFormulario.contrasena,
       });
 
       const { token, usuario } = response.data;
+      
       console.log("usuario recibido", usuario);
 
+const rol = Array.isArray(usuario.IdRol)? usuario.IdRol[0] :usuario.IdRol
       login(token, {
         IdUsuario: usuario.IdUsuario,
         Nombre: usuario.Nombre ?? "",
-        rol: usuario.IdRol,
+        rol: rol,
       });
+      
       localStorage.setItem("usuarioId", usuario.IdUsuario.toString());
       setMensaje("Inicio de sesión exitoso");
       setTipoMensaje("exito");
 
       setTimeout(() => {
-        if (usuario.IdRol === 1) {
-          navigate("/dash"); // Admin
-        } else if (usuario.IdRol === 2) {
+        if (rol === 1) {
+          navigate("/dashusuario"); // Admin
+        } else if (rol === 2) {
           navigate("/dashap"); // Usuario
         }
       }, 1200);

@@ -21,5 +21,6 @@ router.put("/:id",
 router.delete("/:id", 
     validateIdRuta, RutasController.EliminarRutas
 );
+router.post("/obtener-o-crear", RutasController.obtenerOCrearRuta);
 
 export default router;

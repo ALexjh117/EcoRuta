@@ -107,4 +107,47 @@ export class RutasController {
       return res.status(500).json({ error: "Hubo un error al eliminar ruta" });
     }
   };
+
+static obtenerOCrearRuta = async (req: Request, res: Response) => {
+  try {
+    const {
+      id_usuario,
+      nombre_ruta,
+      punto_origen_lat,
+      punto_origen_lng,
+      punto_destino_lat,
+      punto_destino_lng,
+      medio_transporte,
+    } = req.body;
+
+    let ruta = await Rutas.findOne({
+      where: {
+        id_usuario,
+        punto_origen_lat,
+        punto_origen_lng,
+        punto_destino_lat,
+        punto_destino_lng,
+        medio_transporte,
+      },
+    });
+
+    if (!ruta) {
+      ruta = await Rutas.create({
+        id_usuario,
+        nombre_ruta,
+        punto_origen_lat,
+        punto_origen_lng,
+        punto_destino_lat,
+        punto_destino_lng,
+        medio_transporte,
+      });
+    }
+
+    return res.json(ruta);
+  } catch (error) {
+    console.error("Error en obtenerOCrearRuta:", error);
+    return res.status(500).json({ error: "Error interno" });
+  }
+};
+
 }

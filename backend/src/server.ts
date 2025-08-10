@@ -3,6 +3,8 @@ import  router from './router';
 import { bold } from 'colors';
 import colors from 'colors'
 import sequelize from './config/db';
+import cors from 'cors';  // << importa cors
+
 import db from './config/db'
 import UsuarioRouter from './routes/Usuario.Routes'
 import ReporteUsusarioRouter from './routes/ReporteUsuarios.Routes'
@@ -31,6 +33,10 @@ async function connectDB() {
 connectDB()
 
 const app= express()
+app.use(cors({
+  origin: 'http://localhost:5173',  // URL de tu frontend
+  credentials: true,
+}));
 app.use(express.json())
 
 app.use('/', router)

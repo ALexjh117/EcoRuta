@@ -1,4 +1,4 @@
-import {Table, Column, Model, DataType, HasMany} from "sequelize-typescript";
+import {Table, Column, Model, DataType, HasMany,BelongsTo} from "sequelize-typescript";
 
 import {RolUsuario} from '../models/RolUsuario'
 import { Sistema_Logros} from '../models/SistemaLogros'
@@ -54,6 +54,8 @@ export class Usuarios extends Model {
 
   @HasMany(() => Reportes_Usuarios, { foreignKey: "id_usuario" })
   declare reportes: Reportes_Usuarios[];
+  @BelongsTo(() => Usuarios, { foreignKey: "id_usuario" })
+  declare usuario: Usuarios;
 
   @HasMany(() => Ranking, { foreignKey: "id_usuario" })
   declare ranking: Ranking[];
