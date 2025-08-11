@@ -2,9 +2,16 @@ import { Router } from "express";
 import { UsuarioController } from "../controllers/UsuarioController";
 import { handleInputErrors } from "../middlewares/Validation";
 import { validateIdUsuario, validateUsuarioExiste, validateusuarioBody } from "../middlewares/Usuario";
-
+import { authenticate, authorizeAdmin } from "../middlewares/authorizeAdmin";
 const router = Router()
-
+router.get("/test", authenticate, authorizeAdmin, (req, res) => {
+  return res.json({
+    ok: true,
+    usuarioId: req.usuarioId,
+    usuarioRol: req.usuarioRol,
+    usuarioDB: req.usuario ? { ...(req.usuario as any).dataValues } : null,
+  });
+});
 router.get('/', UsuarioController.getAll)
 
 router.get('/:id',
@@ -12,6 +19,8 @@ router.get('/:id',
     handleInputErrors, 
     UsuarioController.getUserId
 )
+
+
 
 router.post('/', 
     validateUsuarioExiste,

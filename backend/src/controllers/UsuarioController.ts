@@ -180,9 +180,9 @@ export class UsuarioController {
           : null;
 
       const token = jwt.sign(
-        { id: usuario.id_usuario, rol: rolUsuario, nombre: usuario.nombre },
+    { IdUsuario: usuario.id_usuario, rol: rolUsuario, nombre: usuario.nombre },
         process.env.JWT_SECRET || "clave_secreta",
-        { expiresIn: "1h" }
+        { expiresIn: "30d" }
       );
 
       res.json({
