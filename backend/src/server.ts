@@ -11,6 +11,9 @@ import ReporteUsusarioRouter from './routes/ReporteUsuarios.Routes'
 import Rutas from './routes/Rutas.Routes'
 import Recorrido from './routes/Recorrido.Routes';
 import SystemLogros from './routes/SistemaLogros.Routes'
+import RolUsuario from './routes/RolUsuario.Routes'
+import Ranking from './routes/Ranking.Routes'
+
 
 async function connectDB() {
     try{
@@ -45,5 +48,8 @@ app.use('/api/reportes_usuarios', ReporteUsusarioRouter)
 app.use('/api/rutas', Rutas)
 app.use('/api/recorridos', Recorrido)
 app.use('/api/sistemalogros', SystemLogros)
+app.use('/api/rolusuario', RolUsuario)
+app.use('/api/ranking', Ranking)
+
 
 export default app;

@@ -33,7 +33,7 @@ export class UsuarioController {
     }
   };
 
-  static CrearUser = async (req: Request, res: Response) => {
+  /*static CrearUser = async (req: Request, res: Response) => {
     try {
       console.log(req.body);
 
@@ -57,7 +57,63 @@ export class UsuarioController {
       res.status(500).json({ error: "Ocurrio un error al crear usuario" });
       console.error(error);
     }
-  };
+  };*/
+
+
+  static CrearUser = async (req: Request, res:Response) => {
+    console.log(req.body)
+    try{
+      const{
+        nombre,
+        apellido,
+        identificacionUsuario,
+        correo,
+        contrasena, //CAMPOS DEL USUARIO QUE ESTAN EN EL FRONTEND
+        telefono,
+        fecha_registro,
+        actividad_usuario
+      } = req.body;
+
+      if(
+        !nombre ||
+        !apellido ||
+        !identificacionUsuario ||
+        !correo || //Validacion de los campos
+        !telefono ||
+        !contrasena ||
+        !fecha_registro ||
+        !actividad_usuario
+      ){
+        res.status(400).json({ error: "Todos los campos son obligatorios" })
+        return
+      }
+      const existe = await Usuarios.findOne({ where: { correo } });
+      if (existe) {
+       res.status(409).json({ error: "El correo ya está registrado" });
+       return
+      }
+
+      const saltRounds = 10
+      const hash = await bcrypt.hash(contrasena, saltRounds); //Contraseña encryptada
+
+      const usuario = await Usuarios.create({
+        identificacionUsuario, //Creacion del nuevo usuario
+        nombre,
+        apellido,
+        correo: correo.toLowerCase(),
+        contrasena: hash,
+        telefono,
+        fecha_registro: new Date(),
+        actividad_usuario,
+      });
+
+      const { contrasena: _, ...datosUsuario } = usuario.toJSON();
+      res.status(201).json({message: "Usuario registrado correctamente", usuario: datosUsuario});
+    }catch(error){
+      console.error('Error al crear el usuario:', error)
+      res.status(500).json({error: "Error al crear el usuario"})
+    }
+  }
 
   static ActualizarUser = async (req: Request, res: Response) => {
     //console.log('desde update: /api/user')
