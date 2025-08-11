@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style/Registrarse.css";
-import axios from "axios";
-
+import api from "../services/api";
 
 interface FormularioRegistro {
   identificacionUsuario: string;
@@ -36,7 +35,7 @@ const RegistroUsuario: React.FC = () => {
   const [tipoMensaje, setTipoMensaje] = useState<"exito" | "error" | "">("");
   const [cargando, setCargando] = useState(false);
 
-  const navigate = useNavigate(); //Descomentar esto, apra anvegar a lo uqe me registro
+  const navigate = useNavigate();
 
   const validarCampo = (nombre: keyof FormularioRegistro, valor: string) => {
     const nuevosErrores = { ...errores };
@@ -94,14 +93,49 @@ const RegistroUsuario: React.FC = () => {
     e.preventDefault();
     setCargando(true);
 
-    (Object.keys(formulario) as (keyof FormularioRegistro)[]).forEach((campo) => {
-      validarCampo(campo, String(formulario[campo] ?? ""));
-    });
+    const nuevosErrores: ErroresFormulario = {};
+    (Object.keys(formulario) as (keyof FormularioRegistro)[]).forEach(
+      (campo) => {
+        const valor = String(formulario[campo] ?? "");
+        switch (campo) {
+          case "identificacionUsuario":
+            if (!valor) nuevosErrores[campo] = "Campo obligatorio";
+            else if (!/^\d{1,50}$/.test(valor))
+              nuevosErrores[campo] = "Debe contener solo números";
+            break;
+          case "nombre":
+          case "apellido":
+            if (!valor) nuevosErrores[campo] = "Campo obligatorio";
+            else if (valor.length > 100)
+              nuevosErrores[campo] = "Máx 100 caracteres";
+            break;
+          case "correo":
+            if (!valor) nuevosErrores[campo] = "Campo obligatorio";
+            else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor))
+              nuevosErrores[campo] = "Correo inválido";
+            break;
+          case "contrasena":
+            if (!valor) nuevosErrores[campo] = "Campo obligatorio";
+            else if (valor.length < 6)
+              nuevosErrores[campo] = "Mínimo 6 caracteres";
+            break;
+          case "telefono":
+            if (!valor) nuevosErrores[campo] = "Campo obligatorio";
+            else if (!/^\d{7,20}$/.test(valor))
+              nuevosErrores[campo] = "Teléfono inválido";
+            break;
+        }
+      }
+    );
 
-    if (Object.keys(errores).length === 0) {
+    setErrores(nuevosErrores);
+
+    if (Object.keys(nuevosErrores).length === 0) {
       try {
-        const respuesta = await axios.post('http://localhost:3000/api/usuarios/', formulario)
-        console.log('Respuesta backend: ', respuesta.data)
+        console.log("datos a enviar",formulario)
+        const respuesta = await api.post("usuarios/",formulario)
+        
+        console.log("Respuesta backend: ", respuesta.data);
 
         setMensaje("✅ Registro exitoso.");
         setTipoMensaje("exito");
@@ -109,14 +143,20 @@ const RegistroUsuario: React.FC = () => {
         setTimeout(() => {
           navigate("/");
         }, 2000);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error al registrar:", error);
+        if (error.response) {
+          console.error("Respuesta backend:", error.response.data);
+          if (error.response.data.error) {
+            console.error(
+              "Detalle error:",
+              JSON.stringify(error.response.data.error, null, 2)
+            );
+          }
+        }
         setMensaje("❌ Error al registrar.");
         setTipoMensaje("error");
       }
-    } else {
-      setMensaje("❌ Corrige los errores e intenta nuevamente.");
-      setTipoMensaje("error");
     }
 
     setCargando(false);
@@ -124,133 +164,132 @@ const RegistroUsuario: React.FC = () => {
 
   return (
     <div className="contenedor-registro">
-    <div className="">
-    <h2 className="title-login">Registro de Usuario</h2>
-    <form className="formulario-registro" onSubmit={handleSubmit}>
+      <div>
+        <h2 className="title-login">Registro de Usuario</h2>
+        <form className="formulario-registro" onSubmit={handleSubmit}>
+          <div className="grupo-campo-registro">
+            <label>Identificación*</label>
+            <input
+              type="text"
+              name="identificacionUsuario"
+              value={formulario.identificacionUsuario}
+              onChange={handleChange}
+              className="campo-input-registro"
+            />
+            {errores.identificacionUsuario && (
+              <p className="mensaje-error-registro">{errores.identificacionUsuario}</p>
+            )}
+          </div>
 
-      <div className="grupo-campo-registro">
-        <label>Identificación*</label>
-        <input
-          type="text"
-          name="identificacionUsuario"
-          value={formulario.identificacionUsuario}
-          onChange={handleChange}
-          className="campo-input-registro"
-        />
-        {errores.identificacionUsuario && (
-          <p className="mensaje-error-registro">{errores.identificacionUsuario}</p>
-        )}
+          <div className="grupo-campo-registro">
+            <label>Nombre*</label>
+            <input
+              type="text"
+              name="nombre"
+              value={formulario.nombre}
+              onChange={handleChange}
+              className="campo-input-registro"
+            />
+            {errores.nombre && (
+              <p className="mensaje-error-registro">{errores.nombre}</p>
+            )}
+          </div>
+
+          <div className="grupo-campo-registro">
+            <label>Apellido*</label>
+            <input
+              type="text"
+              name="apellido"
+              value={formulario.apellido}
+              onChange={handleChange}
+              className="campo-input-registro"
+            />
+            {errores.apellido && (
+              <p className="mensaje-error-registro">{errores.apellido}</p>
+            )}
+          </div>
+
+          <div className="grupo-campo-registro">
+            <label>Correo*</label>
+            <input
+              type="email"
+              name="correo"
+              value={formulario.correo}
+              onChange={handleChange}
+              className="campo-input-registro"
+            />
+            {errores.correo && (
+              <p className="mensaje-error-registro">{errores.correo}</p>
+            )}
+          </div>
+
+          <div className="grupo-campo-registro">
+            <label>Contraseña*</label>
+            <input
+              type="password"
+              name="contrasena"
+              value={formulario.contrasena}
+              onChange={handleChange}
+              className="campo-input-registro"
+            />
+            {errores.contrasena && (
+              <p className="mensaje-error-registro">{errores.contrasena}</p>
+            )}
+          </div>
+
+          <div className="grupo-campo-registro">
+            <label>Teléfono*</label>
+            <input
+              type="tel"
+              name="telefono"
+              value={formulario.telefono}
+              onChange={handleChange}
+              className="campo-input-registro"
+            />
+            {errores.telefono && (
+              <p className="mensaje-error-registro">{errores.telefono}</p>
+            )}
+          </div>
+
+          <div className="grupo-campo-registro">
+            <label>Nivel de actividad*</label>
+            <select
+              name="actividad_usuario"
+              value={formulario.actividad_usuario}
+              onChange={handleChange}
+              className="campo-input-registro"
+            >
+              <option value="alta">Alta</option>
+              <option value="media">Media</option>
+              <option value="baja">Baja</option>
+            </select>
+          </div>
+
+          <div className="grupo-campo-registro">
+            <label>Rol*</label>
+            <select
+              name="tipo_rol"
+              value={formulario.tipo_rol}
+              onChange={handleChange}
+              className="campo-input-registro"
+            >
+              <option value="Admin">Administrador</option>
+              <option value="Participante Rutas">Participante Rutas</option>
+            </select>
+          </div>
+
+          <button type="submit" className="boton-registro" disabled={cargando}>
+            {cargando ? "Registrando..." : "Registrarme"}
+          </button>
+
+          {mensaje && (
+            <p className={tipoMensaje === "exito" ? "mensaje-exito" : "mensaje-error"}>
+              {mensaje}
+            </p>
+          )}
+        </form>
       </div>
-
-      <div className="grupo-campo-registro">
-        <label>Nombre*</label>
-        <input
-          type="text"
-          name="nombre"
-          value={formulario.nombre}
-          onChange={handleChange}
-          className="campo-input-registro"
-        />
-        {errores.nombre && (
-          <p className="mensaje-error-registro">{errores.nombre}</p>
-        )}
-      </div>
-
-      <div className="grupo-campo-registro">
-        <label>Apellido*</label>
-        <input
-          type="text"
-          name="apellido"
-          value={formulario.apellido}
-          onChange={handleChange}
-          className="campo-input-registro"
-        />
-        {errores.apellido && (
-          <p className="mensaje-error-registro">{errores.apellido}</p>
-        )}
-      </div>
-
-      <div className="grupo-campo-registro">
-        <label>Correo*</label>
-        <input
-          type="email"
-          name="correo"
-          value={formulario.correo}
-          onChange={handleChange}
-          className="campo-input-registro"
-        />
-        {errores.correo && (
-          <p className="mensaje-error-registro">{errores.correo}</p>
-        )}
-      </div>
-
-      <div className="grupo-campo-registro">
-        <label>Contraseña*</label>
-        <input
-          type="password"
-          name="contrasena"
-          value={formulario.contrasena}
-          onChange={handleChange}
-          className="campo-input-registro"
-        />
-        {errores.contrasena && (
-          <p className="mensaje-error-registro">{errores.contrasena}</p>
-        )}
-      </div>
-
-      <div className="grupo-campo-registro">
-        <label>Teléfono*</label>
-        <input
-          type="tel"
-          name="telefono"
-          value={formulario.telefono}
-          onChange={handleChange}
-          className="campo-input-registro"
-        />
-        {errores.telefono && (
-          <p className="mensaje-error-registro">{errores.telefono}</p>
-        )}
-      </div>
-
-      <div className="grupo-campo-registro">
-        <label>Nivel de actividad*</label>
-        <select
-          name="actividad_usuario"
-          value={formulario.actividad_usuario}
-          onChange={handleChange}
-          className="campo-input-registro"
-        >
-          <option value="alta">Alta</option>
-          <option value="media">Media</option>
-          <option value="baja">Baja</option>
-        </select>
-      </div>
-
-      <div className="grupo-campo-registro">
-        <label>Rol*</label>
-        <select
-          name="tipo_rol"
-          value={formulario.tipo_rol}
-          onChange={handleChange}
-          className="campo-input-registro"
-        >
-          <option value="Admin">Administrador</option>
-          <option value="Participante Rutas">Participante Rutas</option>
-        </select>
-      </div>
-
-      <button type="submit" className="boton-registro" disabled={cargando}>
-        {cargando ? "Registrando..." : "Registrarme"}
-      </button>
-
-      {mensaje && (
-        <p className={tipoMensaje === "exito" ? "mensaje-exito" : "mensaje-error"}>
-          {mensaje}
-        </p>
-      )}
-    </form>
-  </div>
-  </div>
+    </div>
   );
 };
 

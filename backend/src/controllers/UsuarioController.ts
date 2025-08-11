@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import Usuarios from "../models/Usuarios";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import RolUsuario from "../models/RolUsuario";
 
 export class UsuarioController {
   static getAll = async (req: Request, res: Response) => {
@@ -71,7 +72,8 @@ export class UsuarioController {
         contrasena, //CAMPOS DEL USUARIO QUE ESTAN EN EL FRONTEND
         telefono,
         fecha_registro,
-        actividad_usuario
+        actividad_usuario,
+        tipo_rol,
       } = req.body;
 
       if(
@@ -81,12 +83,13 @@ export class UsuarioController {
         !correo || //Validacion de los campos
         !telefono ||
         !contrasena ||
-        !fecha_registro ||
+      !tipo_rol ||
         !actividad_usuario
       ){
         res.status(400).json({ error: "Todos los campos son obligatorios" })
         return
       }
+      const fechaRegistro = fecha_registro ? new Date(fecha_registro) : new Date();
       const existe = await Usuarios.findOne({ where: { correo } });
       if (existe) {
        res.status(409).json({ error: "El correo ya está registrado" });
@@ -103,9 +106,14 @@ export class UsuarioController {
         correo: correo.toLowerCase(),
         contrasena: hash,
         telefono,
-        fecha_registro: new Date(),
+        fecha_registro: fechaRegistro,
         actividad_usuario,
       });
+
+      await RolUsuario.create({
+        id_usuario:usuario.id_usuario,
+        tipo_rol,
+      })
 
       const { contrasena: _, ...datosUsuario } = usuario.toJSON();
       res.status(201).json({message: "Usuario registrado correctamente", usuario: datosUsuario});

@@ -97,7 +97,7 @@ const rol = Array.isArray(usuario.IdRol)? usuario.IdRol[0] :usuario.IdRol
       setTimeout(() => {
         if (rol === 1) {
           navigate("/dashadmin"); // Admin
-        } else if (rol === 2) {
+        } else if (rol === 6) {
           navigate("/dashusuario"); // Usuario
         }
       }, 1200);
