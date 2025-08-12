@@ -1,6 +1,7 @@
 // src/components/AdminUsers.tsx
 import React, { useEffect, useState } from "react";
 import api from "../services/api";
+import { Users, Loader2 } from "lucide-react";
 
 interface Usuario {
   id_usuario: number;
@@ -39,51 +40,71 @@ const AdminUsers: React.FC = () => {
   const totalPages = Math.ceil(total / perPage);
 
   return (
-    <div className="p-6 bg-white rounded shadow max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Gestión de Usuarios</h1>
+    <div className="p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg max-w-6xl mx-auto w-screen">
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6">
+        <Users className="w-7 h-7 text-blue-600" />
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+          Gestión de Usuarios
+        </h1>
+      </div>
 
       {loading ? (
-        <p>Cargando usuarios...</p>
+        <div className="flex justify-center items-center py-10">
+          <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
+          <span className="ml-2 text-gray-600 dark:text-gray-300">
+            Cargando usuarios...
+          </span>
+        </div>
       ) : (
         <>
-          <table className="w-full border-collapse border border-gray-300">
-            <thead>
-              <tr>
-                <th className="border border-gray-300 p-2">ID</th>
-                <th className="border border-gray-300 p-2">Nombre</th>
-                <th className="border border-gray-300 p-2">Apellido</th>
-                <th className="border border-gray-300 p-2">Correo</th>
-              </tr>
-            </thead>
-            <tbody>
-              {usuarios.map((u) => (
-                <tr key={u.id_usuario} className="hover:bg-gray-100">
-                  <td className="border border-gray-300 p-2">{u.id_usuario}</td>
-                  <td className="border border-gray-300 p-2">{u.nombre}</td>
-                  <td className="border border-gray-300 p-2">{u.apellido}</td>
-                  <td className="border border-gray-300 p-2">{u.correo}</td>
+          {/* Tabla */}
+          <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+            <table className="w-full text-left text-sm text-gray-700 dark:text-gray-300">
+              <thead className="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100">
+                <tr>
+                  <th className="px-4 py-3">ID</th>
+                  <th className="px-4 py-3">Nombre</th>
+                  <th className="px-4 py-3">Apellido</th>
+                  <th className="px-4 py-3">Correo</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {usuarios.map((u) => (
+                  <tr
+                    key={u.id_usuario}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                  >
+                    <td className="px-4 py-3">{u.id_usuario}</td>
+                    <td className="px-4 py-3">{u.nombre}</td>
+                    <td className="px-4 py-3">{u.apellido}</td>
+                    <td className="px-4 py-3">{u.correo}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-          <div className="flex justify-between items-center mt-4">
+          {/* Paginación */}
+          <div className="flex flex-col sm:flex-row justify-between items-center mt-5 gap-3">
             <button
-              className="px-3 py-1 bg-blue-500 text-white rounded disabled:bg-gray-400"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
               onClick={() => setPage((p) => Math.max(p - 1, 1))}
               disabled={page === 1}
             >
-              Anterior
+              ⬅ Anterior
             </button>
-            <span>
+
+            <span className="text-sm text-gray-600 dark:text-gray-300">
               Página {page} de {totalPages}
             </span>
+
             <button
-              className="px-3 py-1 bg-blue-500 text-white rounded disabled:bg-gray-400"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
               onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
               disabled={page === totalPages}
             >
-              Siguiente
+              Siguiente ➡
             </button>
           </div>
         </>
