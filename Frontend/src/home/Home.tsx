@@ -8,10 +8,9 @@ export default function Home() {
         <div className="eco-home-body">
 
             <header className="eco-header">
-                <h1 className="eco-header-title">Bienvenido a Eco Ruta</h1>
+                <h1 className="eco-header-title">Eco Ruta</h1>
                 <h2 className="eco-header-subtitle">
-                    <img src="../img/casquito.png" alt="casquito-insano" className="eco-img-casquito" />
-                    <img src="../img/caminar.png" alt="casquito-insano" className="eco-img-caminar" />
+                    
                 </h2>
             </header>
 
@@ -30,7 +29,7 @@ export default function Home() {
             </section>
 
             <section className="eco-transporte-container">
-               <Carrusel/>
+              
             </section>
 
             <footer className="eco-footer">
