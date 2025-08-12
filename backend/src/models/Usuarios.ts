@@ -18,6 +18,12 @@ export class Usuarios extends Model {
     allowNull: false
   })
   declare nombre: string;
+  
+  @Column({type: DataType.STRING(255), allowNull: true, unique:true})
+  declare google_id: string | null; //Se agrego para el id generado por google
+
+  @Column({type: DataType.STRING(500), allowNull:true}) //Se agrego para la imagen de perfil que tiene el usuario de google
+  declare foto_perfil: string;
 
   @Column({type: DataType.STRING(100), allowNull: false})
   declare apellido: string

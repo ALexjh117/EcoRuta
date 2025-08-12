@@ -3,6 +3,7 @@ import Usuarios from "../models/Usuarios";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import RolUsuario from "../models/RolUsuario";
+import { verificarTokenGoogle } from "../services/googleAuth";
 
 export class UsuarioController {
   static getAll = async (req: Request, res: Response) => {
@@ -138,6 +139,7 @@ export class UsuarioController {
       res.status(500).json({ error: "Hubo un error al atualizar usuario" });
     }
   };
+  
   static eliminarUserId = async (req: Request, res: Response) => {
     console.log("desde delete: /api/user");
     try {
@@ -207,4 +209,51 @@ export class UsuarioController {
       res.status(500).json({ error: "Error interno del servidor" });
     }
   };
+
+  static googleLogin = async (req: Request, res: Response) =>{
+    try{
+      const {token} = req.body
+      if(!token){
+        return res.status(400).json({error: "Falta el token de Google"})
+      }
+
+      const usuarioData = await verificarTokenGoogle(token)
+
+      let usuario = await Usuarios.findOne({where: { google_id: usuarioData.googleId}})
+
+      if(!usuario){
+        usuario = await Usuarios.create({
+        nombre: usuarioData.nombre,
+        apellido: usuarioData.apellido,
+        correo: usuarioData.correo,
+        google_id: usuarioData.googleId,
+        foto_perfil: usuarioData.foto,
+        contrasena: "",
+        telefono: "",
+        identificacionUsuario: "",
+        fecha_registro: new Date(),
+        actividad_usuario: "alta"
+        })
+      }
+
+      const tokenJWT = jwt.sign(
+        {IdUsuario: usuario.id_usuario, nombre: usuario.nombre},
+        process.env.JWT_SECRET || "clave_secreta",
+        {expiresIn: "30d"}
+      )
+
+      res.json({
+        token: tokenJWT,
+        usuario: {
+          IdUsuario: usuario.id_usuario,
+          Nombre: usuario.nombre,
+          Apellido: usuario.apellido
+        }
+      })
+
+    }catch(error){
+      console.error("Error al logueo:", error)
+      res.status(500).json({error: "Error en el login con correo"})
+    }
+  }
 }

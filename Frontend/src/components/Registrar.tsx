@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./style/Registrarse.css";
 import api from "../services/api";
 
+
 interface FormularioRegistro {
   identificacionUsuario: string;
   nombre: string;
@@ -27,7 +28,7 @@ const RegistroUsuario: React.FC = () => {
     contrasena: "",
     telefono: "",
     actividad_usuario: "media",
-    tipo_rol: "Participante Rutas",
+    tipo_rol: "Participante Rutas", /*Tener en cuenta el rol del */
   });
 
   const [errores, setErrores] = useState<ErroresFormulario>({});
@@ -133,7 +134,7 @@ const RegistroUsuario: React.FC = () => {
     if (Object.keys(nuevosErrores).length === 0) {
       try {
         console.log("datos a enviar",formulario)
-        const respuesta = await api.post("usuarios/",formulario)
+        const respuesta = await api.post("http://localhost:3000/api/usuarios/",formulario)
         
         console.log("Respuesta backend: ", respuesta.data);
 
@@ -143,6 +144,7 @@ const RegistroUsuario: React.FC = () => {
         setTimeout(() => {
           navigate("/");
         }, 2000);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         console.error("Error al registrar:", error);
         if (error.response) {
@@ -161,6 +163,8 @@ const RegistroUsuario: React.FC = () => {
 
     setCargando(false);
   };
+
+
 
   return (
     <div className="contenedor-registro">
@@ -251,7 +255,7 @@ const RegistroUsuario: React.FC = () => {
             )}
           </div>
 
-          <div className="grupo-campo-registro">
+          {/*<div className="grupo-campo-registro">
             <label>Nivel de actividad*</label>
             <select
               name="actividad_usuario"
@@ -276,7 +280,7 @@ const RegistroUsuario: React.FC = () => {
               <option value="Admin">Administrador</option>
               <option value="Participante Rutas">Participante Rutas</option>
             </select>
-          </div>
+          </div>*/}
 
           <button type="submit" className="boton-registro" disabled={cargando}>
             {cargando ? "Registrando..." : "Registrarme"}

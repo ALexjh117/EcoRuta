@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-oauth/google": "^0.12.2",
     "@types/jest": "^30.0.0",
     "axios": "^1.11.0",
     "bits": "^0.1.1",
@@ -17,6 +18,7 @@
     "icons": "^1.0.0",
     "jspdf": "^3.0.1",
     "jspdf-autotable": "^5.0.2",
+    "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",
     "motion": "^12.23.12",
     "react": "^19.1.1",

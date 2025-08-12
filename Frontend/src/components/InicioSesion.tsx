@@ -7,6 +7,9 @@ import "./style/Inicio.css";
 import api from "../services/api";
 import { useAuth } from "../contexts/AuthContext";
 
+import { GoogleLogin } from "@react-oauth/google";
+import type { CredentialResponse } from "@react-oauth/google";
+
 const IconoMail: React.FC = () => (
   <svg className="eco-icono-input-inicio" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path
@@ -110,6 +113,18 @@ const rol = Array.isArray(usuario.IdRol)? usuario.IdRol[0] :usuario.IdRol
     }
   };
 
+  //Consumo de la Api(google) para loguearse en la app de ecoruta
+  const googleLogin = async (id_token: string) => {
+    try{
+      const responseLogin = await api.post('http://localhost:3000/api/usuarios/login-google', {token: id_token})
+      const {token, usuario} = responseLogin.data
+      console.log('Usuario Google:', usuario)
+      localStorage.setItem('token', token)
+    }catch(error){
+      console.error('Error con el login:', error)
+    }
+  }
+
   return (
     <>
       <h1 className="eco-titulo-inicio-sesion">¡Bienvenido a Eco Ruta!</h1>
@@ -186,6 +201,15 @@ const rol = Array.isArray(usuario.IdRol)? usuario.IdRol[0] :usuario.IdRol
             {mensaje}
           </p>
         )}
+      <GoogleLogin onSuccess={(credencialRespuesta: CredentialResponse) => { //Componente de google para el btn
+        if(credencialRespuesta.credential){
+          googleLogin(credencialRespuesta.credential)
+        }
+        navigate('/dashusuario')
+      }}onError={() => {
+        console.log('Fallo el Registro con el Login')
+      }}/>
+
       </form>
     </>
   );
