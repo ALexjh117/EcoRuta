@@ -184,7 +184,9 @@ const HistorialRecorridos: React.FC = () => {
           {recorridos.map((r) => (
             <tr key={r.id} style={{ textAlign: "center" }}>
               <td style={{ padding: 8, border: "1px solid #004d40" }}>
-                {new Date(r.fecha).toLocaleDateString()}
+         {new Date(r.fecha + "T00:00:00").toLocaleDateString("es-CO")}
+
+
               </td>
               <td style={{ padding: 8, border: "1px solid #004d40" }}>
                 {r.distanciaKm.toFixed(2)}

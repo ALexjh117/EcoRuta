@@ -168,7 +168,7 @@ const rol = Array.isArray(usuario.IdRol)? usuario.IdRol[0] :usuario.IdRol
           </a>
         </div>
         <br />
-        <a href="#" className="eco-enlace-registro">
+        <a href="registrarse" className="eco-enlace-registro">
           ¿No tienes cuenta? ¡Regístrate aquí!
         </a>
 
