@@ -41,6 +41,7 @@ router.delete('/:id',
 )
 router.post('/login', UsuarioController.loginUser);
 
+router.post('/login-google', UsuarioController.googleLogin) //Crear usuario con google
 
 
 export default router
