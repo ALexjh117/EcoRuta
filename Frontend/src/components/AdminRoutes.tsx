@@ -40,7 +40,7 @@ const totalPages = Math.ceil(total / perPage) || 1;
 
 
   return (
-    <div className="p-6 bg-white rounded shadow max-w-5xl mx-auto">
+    <div className="p-6 bg-white rounded shadow w-screen">
       <h1 className="text-2xl font-bold mb-4">Gestión de Rutas</h1>
 
       {loading ? (

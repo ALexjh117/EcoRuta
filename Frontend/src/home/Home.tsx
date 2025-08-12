@@ -1,6 +1,7 @@
 import  { useState, useEffect } from 'react';
-
+import { useNavigate } from 'react-router-dom'; 
 export default function Home() {
+    const navigate =useNavigate()
     const [scrollY, setScrollY] = useState(0);
 
     useEffect(() => {
@@ -9,15 +10,12 @@ export default function Home() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const navigate = (path) => {
-        console.log(`Navegando a: ${path}`);
-        // Aquí iría la lógica de navegación real
-    };
+    
 
     return (
         <div className="overflow-x-hidden">
             {/* HERO SECTION - PANTALLA COMPLETA */}
-            <section className="relative h-screen bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 text-white overflow-hidden">
+            <section className="relative h-screen bg-gradient-to-br from-emerald-200 via-teal-800 to-cyan-400 text-white overflow-hidden">
                 {/* Elementos decorativos animados */}
                 <div className="absolute inset-0">
                     <div className="absolute top-20 left-32 w-64 h-64 bg-emerald-400 opacity-10 rounded-full animate-pulse blur-xl"></div>
@@ -57,8 +55,11 @@ export default function Home() {
                         {/* Botones de acción */}
                         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
                             <button
-                                className="group relative bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-bold py-6 px-12 rounded-full text-xl shadow-2xl hover:shadow-emerald-500/25 transform hover:scale-110 transition-all duration-500 ease-out overflow-hidden"
-                                onClick={() => navigate('/iniciosesion')}
+                                className="group relative bg-gradient-to-r from-emerald-500 to-teal-500
+                                 hover:from-emerald-400 hover:to-teal-400
+                                  text-white font-bold py-6 px-12 rounded-full text-xl shadow-2xl 
+                                  hover:shadow-emerald-500/25 transform hover:scale-110 transition-all duration-500 ease-out overflow-hidden"
+                                onClick={() => navigate('/iniciosesion')} 
                             >
                                 <div className="absolute inset-0 bg-gradient-to-r from-white to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
                                 <span className="relative flex items-center space-x-4">
@@ -92,7 +93,7 @@ export default function Home() {
                     <div className="text-center mb-20">
                         <h3 className="text-5xl md:text-6xl font-bold text-gray-800 mb-8 leading-tight">
                             Elige tu 
-                            <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent "> superRuta</span>
+                            <span className="bg-gradient-to-r from-emerald-200 to-teal-600 bg-clip-text text-transparent "> superRuta</span>
                         </h3>
                         <p className="text-xl text-gray-600 max-w-7xl mx-auto text-center">
                             Cada forma de movilidad sostenible es un paso hacia un futuro más verde
