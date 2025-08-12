@@ -287,7 +287,7 @@ const fecha = obtenerFechaActual();
   };
 
   return (
-    <div className="div-ruta-container">
+    <div className="div-ruta-container ">
       <MapContainer
         center={
           posicionActual
@@ -321,7 +321,7 @@ const fecha = obtenerFechaActual();
       )}
       <div
         className="div-ruta-modo-transporte"
-        style={{ marginTop: 10, marginBottom: 10 }}
+        style={{ marginTop: 40, marginBottom: 10 }}
       >
         <strong>Modo de transporte:</strong> <br />
         <button

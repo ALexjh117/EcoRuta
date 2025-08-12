@@ -1,125 +1,117 @@
-.contenedor-registro {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-    padding: 3rem;
+/* style/Registrarse.css */
 
+
+
+.contenedor-registro {
+  background: rgba(255, 255, 255, 0.98);
+  padding: 2rem 2.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 450px;
+  margin-left: 599px;
+  height: 950px;
+  margin-top: 30PX;
+  animation: fadeIn 0.6s ease-in-out;
 }
 
+.title-login {
+  text-align: center;
+  font-size: 1.8rem;
+  color: #4f46e5;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
 
 .formulario-registro {
-    width: 680px;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    background-color: #4f46e5;
-    margin: 0 auto;
-    border-radius: 5px;
-    padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
 }
-
-.title-login{
-color: #21ce3e;
-text-align: center;
-}
-
 
 .grupo-campo-registro {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  color: white; 
-  align-items: center;
 }
 
-
-.contenedor-input-registro {
-  position: relative;
+.grupo-campo-registro label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: #374151;
 }
 
 .campo-input-registro {
-  width: 80%;
-  height: 2rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
-  font-size: 1rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  background-color: white;
-  box-sizing: border-box;
-  color: #4f46e5;
+  padding: 0.7rem 0.9rem;
+  border: 1.5px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.25s ease;
 }
 
 .campo-input-registro:focus {
-  outline: none;
-  border-color: #10b981;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-}
-
-.campo-input-registro::placeholder {
-  color: #9ca3af;
-}
-
-.campo-input-registro:invalid {
-  border-color: #59595f;
-}
-
-.campo-input-registro:invalid:focus {
-  border-color: #44ef6f;
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-}
-
-
-.contenedor-terminos-registro {
-  display: flex;
-  align-items: flex-start;
-  margin-right: 100px;
-}
-
-.boton-registro {
-  width: 50%;
-  background-color: #10b981;
-  color: white;
-  font-weight: 500;
-  font-size: 1rem;
-  padding: 0.75rem;
-  height: 3rem;
-  border-radius: 0.5rem;
-  margin: 2px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
-}
-
-.boton-registro:hover {
-  background-color: #21ce3e;
-}
-
-.boton-registro:active {
-  transform: translateY(1px);
-}
-
-.boton-registro:disabled {
-  background-color: #9ca3af;
-  cursor: not-allowed;
-  transform: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 6px rgba(79, 70, 229, 0.4);
 }
 
 .mensaje-error-registro {
-  font-size: 0.75rem;
-  color: #ef4444;
+  color: #dc2626;
+  font-size: 0.85rem;
   margin-top: 0.25rem;
-
 }
 
-.campo-valido-registro {
-  border-color: #10b981;
+.boton-registro {
+  background: #4f46e5;
+  color: white;
+  padding: 0.8rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s;
 }
 
-.campo-invalido-registro {
-  border-color: #ef4444;
+.boton-registro:hover:not(:disabled) {
+  background: #4338ca;
+  transform: translateY(-2px);
 }
 
-@media (min-width: 768px) {
+.boton-registro:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
 
+.mensaje-exito {
+  background: #d1fae5;
+  color: #065f46;
+  padding: 0.6rem;
+  text-align: center;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.mensaje-error {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 0.6rem;
+  text-align: center;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .contenedor-registro {
+    padding: 1.5rem;
+  }
 }
